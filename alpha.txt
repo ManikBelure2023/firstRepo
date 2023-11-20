@@ -1,1 +1,31 @@
-beta 
+import json
+import boto3
+s3_client = boto3.client("s3")
+dynamodb = boto3.resource("dynamodb")
+
+table = dynamodb.Table("Customer")
+
+def lambda_handler(event, context):
+    bucket_name = event['Records'][0]['s3']['bucket']['name']
+    file_name = event['Records'][0]['s3']['object']['key']
+    
+    response = s3_client.get_object(Bucket=bucket_name, Key=file_name)
+    data = response['Body'].read().decode("utf-8")
+    Customers = data.split("\n")
+    Customers.pop(0)
+    for customer in Customers:
+    customers_data = customer.split(",")
+    #add to dynamodb
+    # print(customer)
+    try:
+        table.put_item( 
+            Item={
+                "Day"      : customers_data[0],
+                "Customers": customers_data[1],
+                "Gross"    : customers_data[2],
+                "Expenses" : customers_data[3]
+            }
+        )
+    except Exception as e:
+        print("End of file")
+
