@@ -1,0 +1,31 @@
+import json
+import boto3
+
+def lambda_handler(event, context):
+    try:
+        client = boto3.client("rekognition")
+
+        # Passing S3 bucket object file reference 
+        response = client.detect_text(
+            Image={
+                "S3Object": {
+                    "Bucket": "amazon-rekognition-s3",
+                    "Name": "images.jpg"
+                }
+            }
+        )
+
+        print(response)
+
+        # Return the response
+        return {
+            'statusCode': 200,
+            'body': json.dumps(response)
+        }
+    except Exception as e:
+        # Log any exceptions
+        print(f"Error: {str(e)}")
+        return {
+            'statusCode': 500,
+            'body': json.dumps({'error': str(e)})
+        }
