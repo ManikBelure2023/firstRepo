@@ -1,0 +1,12 @@
+provider "aws" {
+    region = "us-east-1"
+    access_key ="AKIA5SMFZVCFGB2PYTNL"
+    secret_key ="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"
+
+    
+}
+resource "aws_instance" "demo-server" {
+    ami = "ami-0230bd60aa48260c6"
+    key_name = "manik"
+    instance_type = "t2.micro"
+}
