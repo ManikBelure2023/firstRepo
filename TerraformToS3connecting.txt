@@ -1,0 +1,15 @@
+#provider block
+provider "aws" {
+  region = "us-east-1"
+  access_key = "AKIA5SMFZVCFN3SIJL5Y"
+  secret_key = "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"
+}
+
+#s3 
+resource "aws_s3_bucket" "demoofbucket" {
+  bucket = "server-name"
+  tags = {
+    Name = "terraform"
+    Environment="production"
+  }
+}
